@@ -37,16 +37,24 @@ rl.question('Siapa nama anda?  ', Name =>
            
            
             // Baca isi file data secara Asinkron
-            fs.readFile('contact.json', 'utf-8', (err,data)=>{
-                if(err){
+            fs.readFile('contact.json', 'utf-8', (err,data)=> {
+                if (err) {
                     console.error('Error Membaca File', err);
                     return;
                 }
-                let arrayData =JSON.parse(data); // Ubah string JSON menjadi objek (array)
+                let arrayData;
+                if (data === '') {
+                    arrayData = [];
+                } else {
+                arrayData =JSON.parse(data); // Ubah string JSON menjadi objek (array)
                 console.log(arrayData) // Menampilkan Isi File
+                }
             });
             
-            let arrayData = [Name, Phone, Email]
+            arrayData = [Name, Phone, Email];
+            //const newData = {Name, Phone, Email};
+            //arrayData.push(newData);
+
             // Ubah kembali array ke format JSON
             const updatedData = JSON.stringify(arrayData, null, 2); // null dan 2 untuk identitasi yang rapi
            
