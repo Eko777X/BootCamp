@@ -14,11 +14,11 @@ const rl = readline.createInterface
 );
 
 //Menanyakan sesuatu dan membaca input baris per baris
-rl.question('Siapa nama anda? ', Name => 
+rl.question('Siapa nama anda?  ', Name => 
     {
-    rl.question('Nomor Handphone? ', Phone => 
+    rl.question('Nomor Handphone?  ', Phone => 
         {
-        rl.question('Alamat Email? ', Email => 
+        rl.question('Alamat Email?  ', Email => 
             {
             //validator Phone dan Email
             const PhoneValid = validator.isMobilePhone(Phone, "id-ID");
