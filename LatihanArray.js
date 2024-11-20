@@ -42,23 +42,22 @@ rl.question('Siapa nama anda?  ', Name =>
                     console.error('Error Membaca File', err);
                     return;
                 }
+                // Cek apakah data kosong atau file belum memiliki data
                 let arrayData;
                 if (data === '') {
-                    arrayData = [];
+                    arrayData = []; // Jika file kosong, inisialisasi array kosong
                 } else {
                 arrayData =JSON.parse(data); // Ubah string JSON menjadi objek (array)
                 console.log(arrayData) // Menampilkan Isi File
                 }
             });
             
-            arrayData = [Name, Phone, Email];
-            //const newData = {Name, Phone, Email};
-            //arrayData.push(newData);
+            let arrayData = [Name, Phone, Email]; // Memasukkan data ke dalam array ini
 
             // Ubah kembali array ke format JSON
             const updatedData = JSON.stringify(arrayData, null, 2); // null dan 2 untuk identitasi yang rapi
            
-           
+            // Menulis data yang telah diperbaharui kembali ke file secara Asinkron
             fs.writeFile('contact.json', updatedData, 'utf8', (err) => {
                 if (err) {
                     console.error('Error Menulis Ke File', err);
@@ -66,7 +65,6 @@ rl.question('Siapa nama anda?  ', Name =>
                     console.log('Data Berhasil Disimpan');
                 }
             })
-           
            
         rl.close();
             })
