@@ -1,0 +1,211 @@
+/* Reset margin dan padding default */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body dan layout utama */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa;
+  margin: 0;
+  display: flex;
+  flex-direction: column;  /* Mengatur layout secara vertikal */
+  justify-content: flex-start; /* Menyusun konten secara vertikal di atas */
+  align-items: center;      /* Menyusun konten secara horizontal di tengah */
+  height: 100vh;            /* Menggunakan seluruh tinggi layar */
+}
+
+/* Header */
+header {
+  background-color: #007bff; /* Warna latar belakang */
+  color: white;
+  text-align: center;
+  padding: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  width: 100%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Memberikan bayangan ringan */
+}
+
+/* Navigasi (mengubah menjadi horizontal) */
+nav {
+  background-color: #333;
+  color: white;
+  padding: 8px 0;
+  text-align: center;
+  width: 100%;
+  display: flex;            /* Menggunakan flexbox untuk layout horizontal */
+  justify-content: center;  /* Mengatur posisi link navigasi di tengah */
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  padding: 10px 15px;
+  margin: 0 10px;           /* Memberikan jarak antar link */
+  display: inline-block;    /* Membuat link tampil dalam satu baris */
+}
+
+nav a:hover {
+  background-color: #555;
+}
+
+/* Kontainer form */
+.container {
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 600px; /* Ukuran maksimal form */
+  margin-top: 20px; /* Memberikan jarak setelah header */
+  margin-bottom: auto; /* Menjaga konten berada di tengah */
+}
+
+/* Judul form */
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Gaya untuk label dan input */
+label {
+  display: block;
+  font-size: 16px;
+  margin-bottom: 8px;
+  color: #555;
+}
+
+/* Gaya untuk input text dan email */
+input[type="text"], input[type="email"], textarea {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: #f9f9f9;
+}
+
+input[type="text"]:focus, input[type="email"]:focus, textarea:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Gaya untuk tombol submit */
+button {
+  width: 100%;
+  padding: 12px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Gaya untuk tabel (Read - menampilkan data) */
+table {
+  width: 100%;
+  margin-top: 30px;
+  border-collapse: collapse;
+}
+
+table, th, td {
+  border: 1px solid #ddd;
+}
+
+th, td {
+  padding: 12px;
+  text-align: left;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+td {
+  background-color: #fff;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* Gaya untuk tombol Edit dan Delete */
+button.edit, button.delete {
+  padding: 2px 4px;
+  width: 60px;
+  margin: 1px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+}
+
+button.edit {
+  background-color: #28a745;
+  color: white;
+}
+
+button.delete {
+  background-color: #dc3545;
+  color: white;
+}
+
+button.edit:hover {
+  background-color: #218838;
+}
+
+button.delete:hover {
+  background-color: #c82333;
+}
+
+/* Responsif untuk layar kecil */
+@media (max-width: 600px) {
+  .container {
+      padding: 20px;
+  }
+  input[type="text"], input[type="email"], button {
+      padding: 10px;
+  }
+}
+
+.modal {
+  display: none; /* Modal disembunyikan secara default */
+  position: fixed;
+  z-index: 1; /* Pastikan modal di atas konten lain */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4); /* Background semi-transparan */
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
