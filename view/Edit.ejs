@@ -1,0 +1,59 @@
+<%- include('layout/header') %>
+<%- include('layout/nav') %>
+
+<body>
+    <h1>Edit Contact</h1>
+    
+    <!-- Form untuk Edit kontak -->
+    <form action="/Edited/<%= contactToEdit.name %>" method="POST">
+        <label for="name">Name: </label>
+        <input type="text" id="name" name="name" value="<%= contactToEdit.name %>" required>
+        <br>
+        <label for="mobile">No Telp: </label>
+        <input type="text" id="mobile" name="mobile" value="<%= contactToEdit.mobile %>" required>
+        <br>
+        <label for="email">Email: </label>
+        <input type="email" id="email" name="email" value="<%= contactToEdit.email %>" required>
+        <br>
+        
+        <button type="submit">Update</button>
+    </form>
+
+    <a href="/contact">Back to Contact</a>
+
+    <% if (errorMessage) { %>
+        <!-- Tampilkan modal jika ada pesan error -->
+        <div id="errorModal" class="modal">
+          <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <p><%= errorMessage %></p>
+          </div>
+        </div>
+        <script>
+          document.getElementById('errorModal').style.display = 'block';
+        </script>
+      <% } %>
+      
+      <% if (successMessage) { %>
+        <!-- Tampilkan modal jika ada pesan sukses -->
+        <div id="successModal" class="modal">
+          <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <p><%= successMessage %></p>
+          </div>
+        </div>
+        <script>
+          document.getElementById('successModal').style.display = 'block';
+        </script>
+      <% } %>
+      
+      <script>
+        function closeModal() {
+          var modals = document.querySelectorAll('.modal');
+          modals.forEach(modal => modal.style.display = 'none');
+        }
+      </script>
+    
+</body>
+
+<%- include('layout/footer') %>
