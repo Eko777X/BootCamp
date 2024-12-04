@@ -73,20 +73,20 @@ app.post('/contact', (req, res) => {
     res.render('contact', {
       data: contacts,
       title: "Contact",
-      errorMessage: 'Nomor telepon tidak valid. Harap masukkan 10-15 digit angka.',
+      errorMessage: 'Invalid Mobile Number !',
       successMessage: null
     });
   } else {
-    const contacts = readContacts();
     // Memanggil fungsi addContact untuk menambahkan data
     addContact(name, mobile, email);
-    // Jika nomor telepon valid, kirimkan pesan sukses ke EJS
-    res.render('contact', {
-      data: contacts,
-      title: "Contact",
-      successMessage: 'Kontak berhasil ditambahkan!',
-      errorMessage: null
-    });
+    res.redirect('/contact');
+    // Jika nomor telepon valid, kirimkan pesan sukses ke EJS   
+    // res.render('contact', {
+    //   data: contacts,
+    //   title: "Contact",
+    //   successMessage: 'Kontak berhasil ditambahkan!',
+    //   errorMessage: null
+    // });
   }
 });
 
@@ -95,15 +95,34 @@ app.get('/Edit/:name', (req, res) => {
   const name = req.params.name;
   const contacts = readContacts();
   const contactToEdit = contacts.find(c => c.name.toLowerCase() === name.toLowerCase());
-  res.render('Edit', {  contactToEdit, title: "Edit Contact" });
+  res.render('Edit', {  
+    contactToEdit, 
+    title: "Edit Contact",
+    errorMessage: null,   // Set nilai default null
+    successMessage: null });
 });
 
 // Route untuk update kontak (POST ke /Edited/:name)
 app.post('/Edited/:name', (req, res) => {
   const oldName = req.params.name;
   const { name, mobile, email } = req.body;
-  updateContact(oldName, name, mobile, email);  // Memanggil fungsi updateContact dari funcEjs.js
-  res.redirect('/contact');  // Redirect ke halaman kontak setelah data diperbarui
+
+  // Panggil fungsi validasi
+  if (!validateMobile(mobile)) {
+    const name = req.params.name;
+    const contacts = readContacts();
+    const contactToEdit = contacts.find(c => c.name.toLowerCase() === name.toLowerCase());
+    // Jika nomor telepon tidak valid, kirimkan pesan error ke EJS
+    res.render('Edit', {
+      contactToEdit,
+      title: "Edit Contact",
+      errorMessage: 'Invalid Mobile Number !',
+      successMessage: null
+    });
+  } else {
+    updateContact(oldName, name, mobile, email);
+    res.redirect('/contact');
+  }
 });
 
 // Route untuk menghapus kontak (/delete/:name)
