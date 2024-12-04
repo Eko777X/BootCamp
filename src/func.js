@@ -7,7 +7,7 @@ const filePath = ('data/contacts.json');
 // Membuat antarmuka readline untuk membaca input dan menulis output
 const rl = readline.createInterface({
     input: process.stdin,    // Standar input, yaitu terminal
-    output: process.stdout,  // Standar output, yaitu terminal
+    output: process.stdout,  // Standar output, yaitu termina
 });
 
 // Fungsi utilitas untuk meminta input dari pengguna
