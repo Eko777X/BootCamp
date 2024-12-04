@@ -13,10 +13,7 @@ function readContacts() {
   
   // Fungsi untuk menambahkan kontak baru ke dalam file JSON
   function addContact(name, mobile, email) {
-
-    if (!validateMobile(mobile)) {
-        throw new Error('Nomor telepon tidak valid. Pastikan nomor terdiri dari 10 hingga 15 digit angka.');
-    }
+    
     const contacts = readContacts();
   
     // Menambahkan kontak baru
