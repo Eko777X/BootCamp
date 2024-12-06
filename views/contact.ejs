@@ -1,0 +1,30 @@
+<%- include('layout/header') %>
+<%- include('layout/nav') %>
+
+<body>
+
+  <!-- Judul Halaman -->
+  <h1>Halaman Kontak</h1>
+
+  <!-- Tabel untuk menampilkan data -->
+  <table>
+    <thead>
+      <tr>
+        <th>Nama</th>
+        <th>Phone</th>
+        <th>Email</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% data.forEach(item => { %> 
+        <tr>
+          <td><%= item.name %></td> <!-- Menampilkan nama -->
+          <td><%= item.mobile %></td> <!-- Menampilkan phone -->
+          <td><%= item.email %></td> <!-- Menampilkan email -->
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
+</body>
+
+<%- include('layout/footer') %>

@@ -34,31 +34,39 @@ rl.question('Siapa nama anda?  ', Name =>
             console.log(`Email          : ${Email} (${EmailValid ? "Valid" : "Invalid"})`);
 
            
-           
-           
+           if(!fs.existsSync("./contact.json")){
+                console.log("File Tidak Ada")
+                 fs.writeFileSync('./contact.json',"[]",'utf8') //=> {
+                //     if (err) {
+                //         console.error('Error Menulis Ke File', err);
+                //     } else {
+                //         console.log('Data Berhasil Disimpan');
+                //     }
+                // })
+            } 
+            // let NewArray = [];
             // Baca isi file data secara Asinkron
-            fs.readFile('contact.json', 'utf-8', (err,data)=> {
-                if (err) {
-                    console.error('Error Membaca File', err);
-                    return;
-                }
-                // Cek apakah data kosong atau file belum memiliki data
-                let arrayData;
-                if (data === '') {
-                    arrayData = []; // Jika file kosong, inisialisasi array kosong
-                } else {
-                arrayData =JSON.parse(data); // Ubah string JSON menjadi objek (array)
-                console.log(arrayData) // Menampilkan Isi File
-                }
-            });
-            
-            let arrayData = [Name, Phone, Email]; // Memasukkan data ke dalam array ini
-
+            let ArrayContact = fs.readFileSync('contact.json', 'utf-8')
+            console.log(ArrayContact) 
+            // Cek apakah data kosong atau file belum memiliki data
+                // let arrayData;
+                // if (data === '') {
+                //     arrayData = []; // Jika file kosong, inisialisasi array kosong
+                // } else {
+                // arrayData =JSON.parse(data); // Ubah string JSON menjadi objek (array)
+                // console.log(arrayData) // Menampilkan Isi File
+                // }
+            //});
+            console.log (ArrayContact)
+            let NewArray =JSON.parse(ArrayContact);
+            console.log(1)
+            const ObjectDataContact = {Name, Phone, Email}; // Memasukkan data ke dalam objek ini
+            NewArray.push(ObjectDataContact);
             // Ubah kembali array ke format JSON
-            const updatedData = JSON.stringify(arrayData, null, 2); // null dan 2 untuk identitasi yang rapi
+            // const updatedDataContact = JSON.stringify(ObjectDataContact, null, 2); // null dan 2 untuk identitasi yang rapi
            
             // Menulis data yang telah diperbaharui kembali ke file secara Asinkron
-            fs.writeFile('contact.json', updatedData, 'utf8', (err) => {
+            fs.writeFile('contact.json', JSON.stringify(NewArray,null,2), 'utf8', (err) => {
                 if (err) {
                     console.error('Error Menulis Ke File', err);
                 } else {

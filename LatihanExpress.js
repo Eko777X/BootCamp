@@ -2,14 +2,21 @@ const express = require("express"); // Import 'express' module
 const app = express(); // Create an instance of an Express application
 const port = 3000; // Define the port to be used by the server
 const path = require("path");
+const fs = require ("fs");
+const filePath = ('data/contacts.json');
 
 
-app.use(express.static(path.join(__dirname, 'views')));
+app.set("view engine", "ejs");
+
+
+//app.use(express.static(path.join(__dirname, 'views')));
 
 // Mengirimkan file index.html saat mengakses root URL
 app.get("/", (req, res) => {
+  const nama = "Eko";
+  res.render("index",{nama});
   // Kirimkan file index.html dari folder 'public'
-  res.sendFile(path.join(__dirname, 'views', 'index.html'));
+  //res.sendFile(path.join(__dirname, 'views', 'index.html'));
 });
 
 
@@ -22,8 +29,30 @@ app.get("/about", (req, res) => {
 
 // Define a route for the "/contact" URL
 app.get("/contact", (req, res) => {
+  //res.render("contact");
+
+    // cont = [
+    // {
+    //   nama:"A",
+    //   phone:"08767875785"
+    // },
+    // {
+    //   nama:"B",
+    //   phone:"08767875785"
+    // },
+    // {
+    //   nama:"C",
+    //   phone:"08767875785"
+    // }];
+
+    let cont = [];
+    if (fs.existsSync(filePath)) {
+      cont = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+    }
+
+    res.render("contact",{data: cont});
     // Kirimkan file index.html dari folder 'public'
-    res.sendFile(path.join(__dirname, 'views', 'contact.html'));
+    // res.sendFile(path.join(__dirname, 'views', 'contact.html'));
   });
 
   

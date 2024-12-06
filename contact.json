@@ -1,5 +1,12 @@
 [
-  "Eko",
-  "08211909090",
-  "Eko@gmail.com"
+  {
+    "Name": "a",
+    "Phone": "a",
+    "Email": "a"
+  },
+  {
+    "name": "eko",
+    "phone": "08233345566",
+    "mail": "eko@gmail.com"
+  }
 ]

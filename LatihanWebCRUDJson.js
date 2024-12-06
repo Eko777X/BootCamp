@@ -8,10 +8,10 @@ const { title } = require("process");
 const filePath = path.join(__dirname, 'data', 'contacts.json')
 const bodyParser = require('body-parser');
 const morgan = require("morgan"); // Mengimpor Morgan
-const winston = require('winston');
+//const winston = require('winston'); // Untuk membuat pencatatan aksi lebih detail
 // Buat stream untuk log ke file
 const logStream = fs.createWriteStream(path.join(__dirname, 'data', 'access.log'), { flags: 'a' });
-const { readContacts, addContact, updateContact, deleteContact,  validateMobile } = require('./src/funcEjs');  // Mengimpor fungsi dari funcEjs.js
+const { readContacts, addContact, updateContact, deleteContact,  validateMobile, validateName, validateEmail, renderContactPage} = require('./src/funcEjs');  // Mengimpor fungsi dari funcEjs.js
 
 // Mengatur view engine ke EJS
 app.set('view engine', 'ejs');
@@ -52,34 +52,37 @@ app.get('/about', (req, res) => {
 
 // Route untuk halaman kontak (/contact)
 app.get('/contact', (req, res) => {
-  const contacts = readContacts();  // Memanggil fungsi readContacts dari funcEjs.js
-  res.render('contact', { 
-    data: contacts, 
-    title: "Contact",
-    errorMessage: null,   // Set nilai default null
-    successMessage: null  // Set nilai default null
+  renderContactPage(res, 'Contact Page', null, null);
   });
-});
 
 
 // Route untuk menambahkan kontak (POST ke /contact)
 app.post('/contact', (req, res) => {
   const { name, mobile, email } = req.body;  // Mengambil data dari form
 
-  // Panggil fungsi validasi
-  if (!validateMobile(mobile)) {
-    const contacts = readContacts();
-    // Jika nomor telepon tidak valid, kirimkan pesan error ke EJS
-    res.render('contact', {
-      data: contacts,
-      title: "Contact",
-      errorMessage: 'Invalid Mobile Number !',
-      successMessage: null
-    });
-  } else {
-    // Memanggil fungsi addContact untuk menambahkan data
-    addContact(name, mobile, email);
-    res.redirect('/contact');
+  // if (!name) {
+  //   return res.status(400).json({ message: 'Nama harus diisi' });
+  // }
+  // Memanggil fungsi validasi untuk mengecek ketersediaan nama
+  validateName(name, (err, isAvailable) => {
+    if (err) {
+      renderContactPage(res, 'Contact Page', '(500) Terjadi kesalahan saat membaca data', null);
+    }
+  if (isAvailable) {
+      // Panggil fungsi validasi mobile
+    if (!validateMobile(mobile)) {
+    renderContactPage(res, 'Contact Page', 'Invalid Mobile Number', null);
+    } else {
+       // Panggil fungsi Validasi email
+      const validationResult = validateEmail(email);
+      if (!validationResult.isValid) {
+      // Jika email sudah terdaftar, kirimkan pesan error
+      renderContactPage(res, 'Contact Page', 'Email Its Already Uses', null);
+      } else {
+        // Memanggil fungsi addContact untuk menambahkan data
+        addContact(name, mobile, email);
+        res.redirect('/contact');
+      }   
     // Jika nomor telepon valid, kirimkan pesan sukses ke EJS   
     // res.render('contact', {
     //   data: contacts,
@@ -87,7 +90,11 @@ app.post('/contact', (req, res) => {
     //   successMessage: 'Kontak berhasil ditambahkan!',
     //   errorMessage: null
     // });
+    }
+  } else {
+      renderContactPage(res, 'Contact Page', 'Nama sudah ada', null);
   }
+  });
 });
 
 // Route untuk halaman edit kontak (/Edit/:name)
@@ -138,6 +145,6 @@ app.use((req, res) => {
   });
 
 // Menjalankan server
-app.listen(3000, () => {
+app.listen(port, () => {
   console.log('Server berjalan di http://localhost:3000');
 });
