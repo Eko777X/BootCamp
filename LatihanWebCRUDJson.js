@@ -4,7 +4,7 @@ const app = express(); // Create an instance of an Express application
 const port = 3000; // Define the port to be used by the server
 const path = require("path");
 const fs = require ("fs");
-const { title } = require("process");
+//const { title } = require("process");
 const filePath = path.join(__dirname, 'data', 'contacts.json')
 const bodyParser = require('body-parser');
 const morgan = require("morgan"); // Mengimpor Morgan
@@ -52,7 +52,21 @@ app.get('/about', (req, res) => {
 
 // Route untuk halaman kontak (/contact)
 app.get('/contact', (req, res) => {
-  renderContactPage(res, 'Contact Page', null, null);
+  const { contacts, errorMessage } = readContacts(req,res);
+
+    if (errorMessage) {
+      console.error(errorMessage);
+      // Jika ada pesan error, render halaman kontak dengan pesan error
+      return res.render('contact', {
+        data: contacts,
+        title: 'Contact Page',
+        errorMessage: errorMessage,
+        successMessage: null,      
+      });
+    }
+    // Render halaman kontak jika tidak ada error
+    renderContactPage(res, 'Contact Page', null, null);
+    
   });
 
 
@@ -64,10 +78,7 @@ app.post('/contact', (req, res) => {
   //   return res.status(400).json({ message: 'Nama harus diisi' });
   // }
   // Memanggil fungsi validasi untuk mengecek ketersediaan nama
-  validateName(name, (err, isAvailable) => {
-    if (err) {
-      renderContactPage(res, 'Contact Page', '(500) Terjadi kesalahan saat membaca data', null);
-    }
+  validateName(name, (isAvailable) => {
   if (isAvailable) {
       // Panggil fungsi validasi mobile
     if (!validateMobile(mobile)) {

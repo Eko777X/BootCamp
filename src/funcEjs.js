@@ -1,16 +1,63 @@
+// const express = require("express"); // Import 'express' module
+// const app = express(); // Create an instance of an Express application
 const fs = require('fs');
 const path = require('path');
 const filePath = path.join(__dirname, '..', 'data', 'contacts.json');
 const validator = require ('validator');
+// const morgan = require("morgan");
+// //const { stream } = require('winston');
+// const logStream = fs.createWriteStream(path.join(__dirname,'..', 'data', 'access.log'), { flags: 'a' });
+
+
+// app.use(morgan('tiny'));
+
+// app.use(morgan('combined', { stream: logStream }));
 
 // Fungsi untuk membaca kontak dari file JSON
-function readContacts() {
-    let contacts = [];
+function readContacts(req, res) {
+  let contacts = [];
+  let errorMessage = null;
+
+  try {
+    console.log('Mencoba membaca file...');
+
+    // Mengecek apakah file ada
     if (fs.existsSync(filePath)) {
-      contacts = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+      const data = fs.readFileSync(filePath, 'utf-8');
+      console.log('Data file mentah:', data);  // Menampilkan data mentah yang dibaca dari file
+
+      // Menangani parsing JSON dengan try-catch
+      try {
+        contacts = JSON.parse(data);  // Mencoba untuk parsing data JSON
+        console.log('Kontak setelah parsing JSON:', contacts);  // Menampilkan kontak setelah parsing JSON
+      } catch (jsonErr) {
+        // Jika ada error saat parsing JSON, tampilkan pesan error
+        console.error('Error saat parsing JSON:', jsonErr);
+        errorMessage = 'Terjadi kesalahan saat parsing data JSON';
+        return res.status(500).json({ error: errorMessage });
+      }
+    } else {
+      // Jika file tidak ditemukan
+      console.error('File contacts.json tidak ditemukan');
+      errorMessage = 'File contacts.json tidak ditemukan';
+      //return res.status(404).json({ error: errorMessage });
     }
-    return contacts;
+  } catch (err) {
+    // Jika ada error saat membaca file
+    console.error('Error saat membaca file:', err);
+    errorMessage = '(500) Terjadi kesalahan saat membaca data';
+    return res.status(500).json({ error: errorMessage });
   }
+
+  // Jika berhasil membaca dan parsing, kembalikan kontak dan errorMessage
+  if (contacts.length > 0) {
+    console.log('Kontak dibaca:', contacts);
+    return res.status(200).json({ contacts });
+  } else {
+    console.log('Tidak ada kontak ditemukan.');
+    return res.status(404).json({ error: 'Tidak ada kontak ditemukan.' });
+  }
+}
   
   // Fungsi untuk menambahkan kontak baru ke dalam file JSON
   function addContact(name, mobile, email) {
