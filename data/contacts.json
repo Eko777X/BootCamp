@@ -1,27 +1,17 @@
 [
   {
-    "name": "A",
-    "mobile": "08234553543",
-    "email": "eko@gmail.com"
-  },
-  {
     "name": "B",
-    "mobile": "08234553543",
+    "mobile": "08234553777",
     "email": "eko@gmail.com"
   },
   {
     "name": "C",
     "mobile": "0897645454",
-    "email": "Dakjk@gmail.com"
+    "email": "C@gmail.com"
   },
   {
-    "name": "D",
-    "mobile": "0897645454",
-    "email": "E@gmail.com"
-  },
-  {
-    "name": "E",
-    "mobile": "0897645454",
-    "email": "E@gmail.com"
+    "name": "A",
+    "mobile": "08211199934",
+    "email": "A@gmail.com"
   }
 ]
