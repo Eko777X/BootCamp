@@ -13,8 +13,7 @@ const validator = require ('validator');
 
 // app.use(morgan('combined', { stream: logStream }));
 
-// Fungsi untuk membaca kontak dari file JSON
-function readContacts(req, res) {
+function readContacts() {
   let contacts = [];
   let errorMessage = null;
 
@@ -26,49 +25,53 @@ function readContacts(req, res) {
       const data = fs.readFileSync(filePath, 'utf-8');
       console.log('Data file mentah:', data);  // Menampilkan data mentah yang dibaca dari file
 
-      // Menangani parsing JSON dengan try-catch
       try {
-        contacts = JSON.parse(data);  // Mencoba untuk parsing data JSON
+        contacts = JSON.parse(data);  // Parsing data JSON
+        if (!Array.isArray(contacts)) {  // Pastikan data berupa array
+          contacts = []; // Jika tidak, set ke array kosong
+          errorMessage = 'Data tidak dalam format array';
+        }
         console.log('Kontak setelah parsing JSON:', contacts);  // Menampilkan kontak setelah parsing JSON
       } catch (jsonErr) {
-        // Jika ada error saat parsing JSON, tampilkan pesan error
         console.error('Error saat parsing JSON:', jsonErr);
         errorMessage = 'Terjadi kesalahan saat parsing data JSON';
-        return res.status(500).json({ error: errorMessage });
       }
     } else {
-      // Jika file tidak ditemukan
       console.error('File contacts.json tidak ditemukan');
       errorMessage = 'File contacts.json tidak ditemukan';
-      //return res.status(404).json({ error: errorMessage });
     }
   } catch (err) {
-    // Jika ada error saat membaca file
     console.error('Error saat membaca file:', err);
-    errorMessage = '(500) Terjadi kesalahan saat membaca data';
-    return res.status(500).json({ error: errorMessage });
+    errorMessage = 'Terjadi kesalahan saat membaca data';
   }
 
-  // Jika berhasil membaca dan parsing, kembalikan kontak dan errorMessage
-  if (contacts.length > 0) {
-    console.log('Kontak dibaca:', contacts);
-    return res.status(200).json({ contacts });
-  } else {
-    console.log('Tidak ada kontak ditemukan.');
-    return res.status(404).json({ error: 'Tidak ada kontak ditemukan.' });
-  }
+  return { contacts, errorMessage };
 }
   
   // Fungsi untuk menambahkan kontak baru ke dalam file JSON
   function addContact(name, mobile, email) {
-    
-    const contacts = readContacts();
+    const { contacts, errorMessage } = readContacts();
+    if (errorMessage) {
+      console.error(errorMessage);
+      return;
+    }
+  
+    // Memastikan bahwa nama, mobile, dan email sudah divalidasi
+    if (!name || !mobile || !email) {
+      console.error('Nama, mobile, atau email tidak boleh kosong.');
+      return;
+    }
   
     // Menambahkan kontak baru
     contacts.push({ name, mobile, email });
   
     // Menulis kembali data yang telah diperbarui ke file JSON
-    fs.writeFileSync(filePath, JSON.stringify(contacts, null, 2));
+    try {
+      fs.writeFileSync(filePath, JSON.stringify(contacts, null, 2));
+      console.log('Kontak berhasil ditambahkan!');
+    } catch (err) {
+      console.error('Error saat menulis ke file:', err);
+    }
   }
   
   // Fungsi untuk mengupdate data kontak
@@ -89,61 +92,99 @@ function readContacts(req, res) {
   
   // Fungsi untuk menghapus kontak berdasarkan nama
   function deleteContact(name) {
-    let contacts = readContacts();
+    let { contacts, errorMessage } = readContacts();
+    if (errorMessage) {
+      console.error(errorMessage);
+      return;
+    }
   
     // Menghapus kontak yang cocok dengan nama
+    const originalLength = contacts.length;
     contacts = contacts.filter(contact => contact.name.toLowerCase() !== name.toLowerCase());
   
+    if (contacts.length === originalLength) {
+      console.error('Kontak tidak ditemukan!');
+      return;
+    }
+  
     // Menyimpan kembali data yang telah diperbarui ke file
-    fs.writeFileSync(filePath, JSON.stringify(contacts, null, 2));
+    try {
+      fs.writeFileSync(filePath, JSON.stringify(contacts, null, 2));
+      console.log('Kontak berhasil dihapus!');
+    } catch (err) {
+      console.error('Error saat menulis ke file:', err);
+    }
   }
   
-  // Fungsi untuk memvalidasi nomor telepon
-  function validateMobile(mobile) {
-    return validator.isMobilePhone(mobile,'id-ID')
-  }
   
+  //fungsi validasi no HP
+function validateMobile(mobile) {
+  // Validasi nomor telepon menggunakan validator
+  if (!validator.isMobilePhone(mobile, 'id-ID')) {
+    console.error('Nomor telepon tidak valid!');
+    return false;
+  }
+  return true;
+}
 
-  // Fungsi untuk memeriksa apakah nama sudah ada
+// fungsi validasi nama
 function validateName(name, callback) {
   fs.readFile(filePath, 'utf8', (err, data) => {
     if (err) {
+      console.error('Error saat membaca file contacts.json:', err);
       return callback(err); // Jika terjadi error saat membaca file
     }
+
     try {
       const users = JSON.parse(data); // Parsing JSON
+      if (!Array.isArray(users)) {
+        return callback(new Error('Data dalam file bukan array'));
+      }
+
       // Cek apakah nama sudah ada dalam data pengguna
       const userExists = users.some(user => user.name.toLowerCase() === name.toLowerCase());
       callback(null, !userExists); // Mengembalikan true jika nama tersedia, false jika sudah ada
     } catch (parseError) {
+      console.error('Error saat parsing JSON:', parseError);
       callback(parseError); // Jika terjadi error saat parsing JSON
     }
   });
 }
-  
-// Fungsi untuk merender halaman kontak
-function renderContactPage(res, title = "", errorMessage = null, successMessage = null) {
-  const contacts = readContacts();  // Memanggil fungsi readContacts dari funcEjs.js
-  res.render('contact', { 
-    data: contacts,  // Menyertakan data kontak ke dalam view
-    title: title,  // Menyertakan judul
-    errorMessage: errorMessage,  // Menyertakan pesan error
-    successMessage: successMessage  // Menyertakan pesan sukses
-  });
-} 
 
-
-// Fungsi untuk validasi apakah email sudah terdaftar
+ // fungsi validasi email 
 function validateEmail(email) {
-  const contacts = readContacts(); // Membaca data kontak dari file
-  const existingContact = contacts.find(contact => contact.email === email); // Mencari email yang sama
-
-  if (existingContact) {
-    return { isValid: false}; // Jika email ditemukan
+  const { contacts, errorMessage } = readContacts();
+  if (errorMessage) {
+    console.error(errorMessage);
+    return { isValid: false };
   }
-  return { isValid: true}; // Jika email tidak ditemukan
+
+  const existingContact = contacts.find(contact => contact.email === email); // Mencari email yang sama
+  if (existingContact) {
+    return { isValid: false }; // Jika email ditemukan
+  }
+  return { isValid: true }; // Jika email tidak ditemukan
 }
 
+// fungsi menampilkan page
+function renderContactPage(res, title = "", errorMessage = null, successMessage = null) {
+  const { contacts, errorMessage: readErrorMessage } = readContacts();  // Memanggil fungsi readContacts
+  if (readErrorMessage) {
+    console.error(readErrorMessage);
+    return res.render('contact', { 
+      data: [],  // Mengirimkan array kosong jika ada error
+      title: title,  
+      errorMessage: 'Terjadi kesalahan membaca data kontak',  // Pesan error generik
+      successMessage: null
+    });
+  }
+  res.render('contact', { 
+    data: contacts,  
+    title: title,  
+    errorMessage: errorMessage,  
+    successMessage: successMessage  
+  });
+}
 
 
 module.exports = { readContacts, addContact, updateContact, deleteContact, validateMobile, validateName, validateEmail, renderContactPage };

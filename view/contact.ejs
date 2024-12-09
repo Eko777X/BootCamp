@@ -27,25 +27,20 @@
         <th>Email</th>
         <th>Aksi</th>
       </tr>
-      <!-- Misalnya, Anda menambahkan baris data di sini -->
-      <tr>
-        <% data.forEach(contact => { %> 
-            <tr>
-              <td><%= contact.name %></td> <!-- Menampilkan nama -->
-              <td><%= contact.mobile %></td> <!-- Menampilkan phone -->
-              <td><%= contact.email %></td> <!-- Menampilkan email -->
-              <td>
-                
-                <a href="/Edit/<%= contact.name %>"><button class="edit" type="submit">Edit</button></a>
-                <form action="/delete/<%= contact.name %>" method="POST">
-                  <button type="submit" class="delete">Delete</button>
-                </form>
-            
-              </td>
-            </tr>
-          <% }); %>
-       
-      </tr>
+      <!-- Menampilkan data -->
+      <% data.forEach(contact => { %> 
+          <tr>
+            <td><%= contact.name %></td> <!-- Menampilkan nama -->
+            <td><%= contact.mobile %></td> <!-- Menampilkan telp -->
+            <td><%= contact.email %></td> <!-- Menampilkan email -->
+            <td>
+              <a href="/Edit/<%= contact.name %>"><button class="edit" type="submit">Edit</button></a>
+              <form action="/delete/<%= contact.name %>" method="POST">
+                <button type="submit" class="delete">Delete</button>
+              </form>
+            </td>
+          </tr>
+      <% }); %>
     </table>
   </div>
 
@@ -58,7 +53,16 @@
       </div>
     </div>
     <script>
+      // Pastikan modal muncul setelah errorMessage dikirimkan
       document.getElementById('errorModal').style.display = 'block';
+
+      // Mendapatkan errorMessage dari EJS dan menambahkan timeout redirect
+      const errorMessage = "<%= errorMessage %>";
+      if (errorMessage.includes('Terjadi kesalahan saat parsing data JSON')) {
+        setTimeout(function() {
+          window.location.href = '/'; // Arahkan ke halaman home setelah 1 detik
+        }, 1000); // 1000ms = 1 detik
+      }
     </script>
   <% } %>
   
@@ -74,14 +78,14 @@
       document.getElementById('successModal').style.display = 'block';
     </script>
   <% } %>
-  
+
   <script>
+    // Menutup modal
     function closeModal() {
       var modals = document.querySelectorAll('.modal');
       modals.forEach(modal => modal.style.display = 'none');
     }
   </script>
-
 </body>
 
 <%- include('layout/footer') %>
