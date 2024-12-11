@@ -1,0 +1,50 @@
+<!-- Include Header -->
+<%- include('layouts/header') %>
+<body>
+    <div class="container mt-5">
+        <div class="card shadow-lg border-0">
+            <div class="card-header bg-primary text-white">
+                <h3 class="card-title text-center">Contact List</h3>
+            </div>
+            <div class="card-body">
+                <table class="table table-hover table-striped">
+                    <thead class="bg-light">
+                        <tr>
+                            <th>No</th>
+                            <th>Name</th>
+                            <th>Mobile</th>
+                            <th>Email</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Loop untuk menampilkan data -->
+                        <% data.forEach((contact, index) => { %>
+                            <tr>
+                                <td><%= index + 1 %></td>
+                                <td><%= contact.name %></td>
+                                <td><%= contact.mobile %></td>
+                                <td class="text-primary"><%= contact.email %></td>
+                                <td>
+                                    <!-- Detail Button -->
+                                    <a href="/details/<%= contact.id %>" class="btn btn-outline-info btn-sm me-2">
+                                        <i class="fas fa-eye"></i> Detail
+                                    </a>
+                                    <!-- Delete Button -->
+                                    <form action="/delete/<%= contact.id %>" method="POST" style="display: inline;">
+                                        <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('Are you sure you want to delete this contact?');">
+                                            <i class="fas fa-trash-alt"></i> Delete
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+
+<!-- Include Footer -->
+<%- include('layouts/footer') %>

@@ -1,0 +1,18 @@
+<%- include('layouts/header') %>
+
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">Edit Data</h3>
+  </div>
+  <div class="card-body">
+    <form action="/update/<%= data.id %>" method="POST">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" class="form-control" id="name" name="name" value="<%= data.name %>" required>
+      </div>
+      <button type="submit" class="btn btn-success">Update Data</button>
+    </form>
+  </div>
+</div>
+
+<%- include('layouts/footer') %>
