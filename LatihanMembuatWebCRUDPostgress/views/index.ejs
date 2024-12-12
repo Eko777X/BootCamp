@@ -1,7 +1,19 @@
 <!-- Include Header -->
 <%- include('layouts/header') %>
 <body>
+
+    <%- include('layouts/modalDelete') %>
     <div class="container mt-5">
+
+        <% if (success === 'true') { %>
+            <script>
+              window.onload = function() {
+                var myModal = new bootstrap.Modal(document.getElementById('deleteSuccessModal'));
+                myModal.show();
+              };
+            </script>
+            <% } %>
+
         <div class="card shadow-lg border-0">
             <div class="card-header bg-primary text-white">
                 <h3 class="card-title text-center">Contact List</h3>

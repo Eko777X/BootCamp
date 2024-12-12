@@ -1,18 +1,50 @@
 <%- include('layouts/header') %>
+<%- include('layouts/modalAdd') %>
 
-<div class="card">
-  <div class="card-header">
-    <h3 class="card-title">Add New Data</h3>
-  </div>
-  <div class="card-body">
-    <form action="/create" method="POST">
-      <div class="form-group">
-        <label for="name">Name</label>
-        <input type="text" class="form-control" id="name" name="name" required>
+  <% if (success === 'true') { %>
+      <script>
+        window.onload = function() {
+          var myModal = new bootstrap.Modal(document.getElementById('addSuccessModal'));
+          myModal.show();
+        };
+      </script>
+      <% } %>
+
+<section class="content">
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <!-- Card -->
+        <div class="card card-primary">
+          <div class="card-header">
+            <h3 class="card-title">Add New Data</h3>
+          </div>
+          <!-- Form Start -->
+          <form action="/created" method="POST">
+            <div class="card-body">
+              <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Enter full name" required>
+              </div>
+              <div class="form-group">
+                <label for="phone">Phone</label>
+                <input type="text" class="form-control" id="mobile" name="mobile" placeholder="Enter phone number" required>
+              </div>
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Enter email address" required>
+              </div>
+            </div>
+            <!-- Card Footer -->
+            <div class="card-footer">
+              <button type="submit" class="btn btn-primary btn-block">Add Data</button>
+            </div>
+          </form>
+        </div>
+        <!-- /.card -->
       </div>
-      <button type="submit" class="btn btn-primary">Add Data</button>
-    </form>
+    </div>
   </div>
-</div>
+</section>
 
 <%- include('layouts/footer') %>

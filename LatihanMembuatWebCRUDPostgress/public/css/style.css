@@ -1,34 +1,51 @@
+/* Memberikan efek cahaya pada teks */
 .text-glow {
-    color: white; /* Warna teks */
-    text-shadow: 0 0 8px rgba(255, 255, 255, 0.8), 
-                 0 0 12px rgba(255, 255, 255, 0.6), 
-                 0 0 20px rgba(255, 255, 255, 0.4);
-    transition: text-shadow 0.3s ease, color 0.3s ease;
+    color: white; /* Warna teks default */
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.8), /* Cahaya pertama */
+                 0 0 12px rgba(255, 255, 255, 0.6), /* Cahaya kedua */
+                 0 0 20px rgba(255, 255, 255, 0.4); /* Cahaya ketiga */
+    transition: text-shadow 0.3s ease, color 0.3s ease; /* Transisi halus saat hover */
 }
 
+/* Mengubah efek cahaya dan warna teks saat hover */
 .text-glow:hover {
-    text-shadow: 0 0 12px rgba(255, 255, 255, 0.9), 
-                 0 0 20px rgba(247, 242, 242, 0.8), 
-                 0 0 30px rgba(252, 249, 249, 0.7);
-    color: rgb(0, 255, 98); /* Ubah warna saat hover */
+    text-shadow: 0 0 12px rgba(255, 255, 255, 0.9), /* Cahaya lebih terang saat hover */
+                 0 0 20px rgba(247, 242, 242, 0.8), /* Cahaya kedua saat hover */
+                 0 0 30px rgba(252, 249, 249, 0.7); /* Cahaya ketiga saat hover */
+    color: rgb(0, 255, 98); /* Mengubah warna teks menjadi hijau saat hover */
 }
 
+/* Memberikan warna latar belakang saat baris tabel di-hover */
 .table-hover tbody tr:hover {
-    background-color: #f8f9fa; /* Warna saat hover */
+    background-color: #f8f9fa; /* Warna latar belakang baris tabel saat hover */
 }
 
+/* Mengubah tampilan judul kartu */
 .card-title {
-    font-weight: bold;
-    font-size: 1.5rem;
-    text-transform: uppercase;
+    font-weight: bold; /* Menebalkan teks judul */
+    font-size: 1.5rem; /* Ukuran font untuk judul */
+    text-transform: uppercase; /* Mengubah teks menjadi huruf kapital */
 }
 
+/* Memberikan efek hover pada tombol dengan kelas .btn-outline-info */
 .btn-outline-info:hover {
-    background-color: #17a2b8;
-    color: #fff;
+    background-color: #17a2b8; /* Mengubah warna latar belakang menjadi biru saat hover */
+    color: #fff; /* Mengubah warna teks menjadi putih */
 }
 
+/* Memberikan efek hover pada tombol dengan kelas .btn-outline-danger */
 .btn-outline-danger:hover {
-    background-color: #dc3545;
-    color: #fff;
+    background-color: #dc3545; /* Mengubah warna latar belakang menjadi merah saat hover */
+    color: #fff; /* Mengubah warna teks menjadi putih */
+}
+
+/* Menambahkan efek hover pada gambar di navbar */
+.navbar img {
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Efek transisi untuk gambar */
+}
+
+/* Mengubah gambar di navbar saat di-hover */
+.navbar img:hover {
+    transform: scale(1.1); /* Memperbesar gambar saat hover */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3); /* Menambahkan bayangan saat hover */
 }
