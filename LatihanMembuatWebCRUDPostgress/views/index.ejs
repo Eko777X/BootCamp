@@ -2,13 +2,13 @@
 <%- include('layouts/header') %>
 <body>
 
-    <%- include('layouts/modalDelete') %>
+    <%- include('layouts/modal') %>
     <div class="container mt-5">
 
         <% if (success === 'true') { %>
             <script>
               window.onload = function() {
-                var myModal = new bootstrap.Modal(document.getElementById('deleteSuccessModal'));
+                var myModal = new bootstrap.Modal(document.getElementById('SuccessModal'));
                 myModal.show();
               };
             </script>

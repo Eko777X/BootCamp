@@ -22,7 +22,7 @@ app.get('/', async (req, res) => {
   try {
     const data = await readContacts();// tampilkan isi data dari table data_contacts
     // Render data ke file EJS
-    res.render('index', { title: 'Home', data, success: 'false'});
+    res.render('index', { title: 'Home', data, success: 'false', ModalMessage:''});
   } catch (err) {
     console.error('Error mengambil data:', err);
     res.status(500).send('Internal Server Error');
@@ -42,7 +42,7 @@ app.post('/created', async (req, res) => {
     if (isAdded) {
       const data = await readContacts();// tampilkan isi data dari table data_contacts
       console.log(`Contact Added: ${name}`);
-      res.render('index', { title: 'Home', data, success: 'true' });//Render ke halaman utama setelah berhasil menambahkan
+      res.render('index', { title: 'Home', data, success: 'true', ModalMessage: 'Success Added Contact' });//Render ke halaman utama setelah berhasil menambahkan
     } else {
       res.status(400).send('Failed to add contact');
     }
@@ -59,7 +59,7 @@ app.post('/delete/:id', async (req, res) => {
     if (isDeleted) {
       const data = await readContacts();// tampilkan isi data dari table data_contacts
       console.log(`Contact With Id: ${id} Was Deleted`);
-      res.render('index', { title: 'Home', data, success: 'true' });
+      res.render('index', { title: 'Home', data, success: 'true', ModalMessage: 'Contact Has Been Deleted' });
     } else {
       console.log(`No contact found with ID ${id}`);
       res.redirect('/');
